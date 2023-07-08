@@ -4,7 +4,7 @@ const nextConfig = {
     domains: [
       "lh3.googleusercontent.com",
       "res.cloudinary.com",
-      "https://flexibble-sand.vercel.app",
+      "flexibble-sand.vercel.app",
     ],
   },
   experimental: {
