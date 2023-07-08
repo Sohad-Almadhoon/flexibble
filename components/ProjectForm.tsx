@@ -30,7 +30,7 @@ const ProjectForm = ({ type, session, project }: Props) => {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const { token } = await fetchToken(true);
+    const { token } = await fetchToken();
     try {
 
       if (type === "create") {

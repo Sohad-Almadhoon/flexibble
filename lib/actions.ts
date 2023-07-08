@@ -6,7 +6,7 @@ import { GraphQLClient } from "graphql-request";
 const isProduction = process.env.NODE_ENV === "production";
 const apiUrl = isProduction ? process.env.GRAFBASE_API_URL || '' : " http://127.0.0.1:4000/graphql";
 const apiKey = isProduction ? process.env.GRAFBASE_API_KEY || '' : "1234";
-const serverUrl = isProduction ? process.env.SERVER_URL : "http://localhost:3000";
+const serverUrl = isProduction ? process.env.NEXT_PUBLIC_SERVER_URL : "http://localhost:3000";
 console.log(`${serverUrl}/api/auth/token`)
 
 const client = new GraphQLClient(apiUrl);
@@ -25,17 +25,17 @@ export const createUser = (name: string, email: string, avatarUrl: string) => {
     client.setHeader('x-api-key', apiKey);
     return makeGraphQlRequest(createUserMutation, { input: { name, email, avatarUrl } });
 }
-export const fetchToken = async(isClient?: boolean) => {
+export const fetchToken = async() => {
     try {
-        const response = await fetch(`${isClient ? process.env.NEXT_PUBLIC_SERVER_URL : serverUrl}/api/auth/token`);
+        const response = await fetch(`${serverUrl}/api/auth/token`);
         return response.json();
     } catch (error) {
         throw error;
     }
 }; 
-const uploadImage = async (imagePath: string , isClient : boolean) => {
+const uploadImage = async (imagePath: string) => {
     try {
-        const response = await fetch(`${isClient ? process.env.NEXT_PUBLIC_SERVER_URL :serverUrl}/api/upload`, {
+        const response = await fetch(`${serverUrl}/api/upload`, {
             method: 'POST',
             body: JSON.stringify({ path: imagePath })
         });
@@ -45,7 +45,7 @@ const uploadImage = async (imagePath: string , isClient : boolean) => {
     }
 }
 export const createNewProject = async (form: ProjectForm, createorId: string, token: string) => {
-    const imageUrl = await uploadImage(form.image , true);
+    const imageUrl = await uploadImage(form.image);
     if (imageUrl.url) {
         client.setHeader("Authorization", `Bearer ${token}`)
         return makeGraphQlRequest(createProjectMutation, {
@@ -82,7 +82,7 @@ export const updateProject = async (form: ProjectForm, projectId: string, token:
     let updatedForm = { ...form };
     const isUploadingNewImage = isBase64DataURL(form.image);
     if (isUploadingNewImage) {
-        const imageUrl = await uploadImage(form.image ,true);
+        const imageUrl = await uploadImage(form.image);
         if (imageUrl.url) {
             updatedForm = { ...form, image: imageUrl.url }
         }

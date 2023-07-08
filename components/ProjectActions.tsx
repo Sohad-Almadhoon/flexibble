@@ -10,7 +10,7 @@ const ProjectActions = ({ projectId }: { projectId: string }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const handleDeleteProject = async () => {
     setIsDeleting(true);
-    const { token } = await fetchToken(true);
+    const { token } = await fetchToken();
     try {
       await deleteProject(projectId, token);
       router.push("/");
