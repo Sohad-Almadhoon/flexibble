@@ -25,14 +25,14 @@ export const createUser = (name: string, email: string, avatarUrl: string) => {
     client.setHeader('x-api-key', apiKey);
     return makeGraphQlRequest(createUserMutation, { input: { name, email, avatarUrl } });
 }
-export const fetchToken = async() => {
+export const fetchToken = async () => {
     try {
         const response = await fetch(`${serverUrl}/api/auth/token`);
         return response.json();
     } catch (error) {
         throw error;
     }
-}; 
+};
 const uploadImage = async (imagePath: string) => {
     try {
         const response = await fetch(`${serverUrl}/api/upload`, {
@@ -47,6 +47,7 @@ const uploadImage = async (imagePath: string) => {
 export const createNewProject = async (form: ProjectForm, createorId: string, token: string) => {
     const imageUrl = await uploadImage(form.image);
     if (imageUrl.url) {
+        console.log(imageUrl.url)
         client.setHeader("Authorization", `Bearer ${token}`)
         return makeGraphQlRequest(createProjectMutation, {
             input: {

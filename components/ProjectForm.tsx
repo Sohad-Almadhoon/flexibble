@@ -47,6 +47,7 @@ const ProjectForm = ({ type, session, project }: Props) => {
       setIsSubmitting(false);
     }
   };
+
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const file = e.target.files?.[0];
