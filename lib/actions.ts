@@ -27,12 +27,12 @@ export const createUser = (name: string, email: string, avatarUrl: string) => {
 }
 export const fetchToken = async(isClient?: boolean) => {
     try {
-        const response = await fetch(`${isClient ? process.env.NEXT_SERVER_URL : serverUrl}/api/auth/token`);
+        const response = await fetch(`${isClient ? process.env.NEXT_PUBLIC_SERVER_URL : serverUrl}/api/auth/token`);
         return response.json();
     } catch (error) {
         throw error;
     }
-};
+}; 
 const uploadImage = async (imagePath: string) => {
     try {
         const response = await fetch(`${serverUrl}/api/upload`, {
