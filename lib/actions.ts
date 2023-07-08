@@ -33,9 +33,9 @@ export const fetchToken = async(isClient?: boolean) => {
         throw error;
     }
 }; 
-const uploadImage = async (imagePath: string) => {
+const uploadImage = async (imagePath: string , isClient : boolean) => {
     try {
-        const response = await fetch(`${serverUrl}/api/upload`, {
+        const response = await fetch(`${isClient ? process.env.NEXT_PUBLIC_SERVER_URL :serverUrl}/api/upload`, {
             method: 'POST',
             body: JSON.stringify({ path: imagePath })
         });
@@ -45,7 +45,7 @@ const uploadImage = async (imagePath: string) => {
     }
 }
 export const createNewProject = async (form: ProjectForm, createorId: string, token: string) => {
-    const imageUrl = await uploadImage(form.image);
+    const imageUrl = await uploadImage(form.image , true);
     if (imageUrl.url) {
         client.setHeader("Authorization", `Bearer ${token}`)
         return makeGraphQlRequest(createProjectMutation, {
@@ -82,12 +82,11 @@ export const updateProject = async (form: ProjectForm, projectId: string, token:
     let updatedForm = { ...form };
     const isUploadingNewImage = isBase64DataURL(form.image);
     if (isUploadingNewImage) {
-        const imageUrl = await uploadImage(form.image);
+        const imageUrl = await uploadImage(form.image ,true);
         if (imageUrl.url) {
             updatedForm = { ...form, image: imageUrl.url }
         }
     }
-
     client.setHeader("Authorization", `Bearer ${token}`)
     return makeGraphQlRequest(updateProjectMutation, { id: projectId, input: updatedForm });
 };
