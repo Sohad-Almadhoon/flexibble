@@ -8,6 +8,7 @@ import CustomMenu from "./CustomMenu";
 import Button from "./Button";
 import { createNewProject, fetchToken, updateProject } from "@/lib/actions";
 import { useRouter } from "next/navigation";
+import { NEXT_BUILTIN_DOCUMENT } from "next/dist/shared/lib/constants";
 interface Props {
   type: string;
   session: SessionInterface;
@@ -29,8 +30,9 @@ const ProjectForm = ({ type, session, project }: Props) => {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const { token } = await fetchToken();
+    const { token } = await fetchToken(true);
     try {
+
       if (type === "create") {
         //create project
         await createNewProject(form, session?.user?.id, token);

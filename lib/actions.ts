@@ -8,6 +8,7 @@ const apiUrl = isProduction ? process.env.GRAFBASE_API_URL || '' : " http://127.
 const apiKey = isProduction ? process.env.GRAFBASE_API_KEY || '' : "1234";
 const serverUrl = isProduction ? process.env.SERVER_URL : "http://localhost:3000";
 console.log(`${serverUrl}/api/auth/token`)
+
 const client = new GraphQLClient(apiUrl);
 const makeGraphQlRequest = async (query: string, variables = {}) => {
     try {
@@ -24,9 +25,9 @@ export const createUser = (name: string, email: string, avatarUrl: string) => {
     client.setHeader('x-api-key', apiKey);
     return makeGraphQlRequest(createUserMutation, { input: { name, email, avatarUrl } });
 }
-export const fetchToken = async () => {
+export const fetchToken = async(isClient?: boolean) => {
     try {
-        const response = await fetch(`${serverUrl}/api/auth/token`);
+        const response = await fetch(`${isClient ? process.env.NEXT_SERVER_URL : serverUrl}/api/auth/token`);
         return response.json();
     } catch (error) {
         throw error;
